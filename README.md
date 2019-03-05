@@ -2,8 +2,9 @@ BRAINGLANCE
 ================================
 Brainglance is a python-based software package to display single subject information for MRI.
 
+![brainglance_example](https://github.com/lipsia-fmri/brainglance/blob/master/example.png)
 
-.. image:: https://github.com/lipsia-fmri/brainglance/blob/master/example.png
+
 
 
 
