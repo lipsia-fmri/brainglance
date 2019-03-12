@@ -28,9 +28,9 @@ PREREQUISITES
 
 You will need the following inputs:
 
-- a 3D brain map of each subject in native subject space, containing some kind of data you want to display
-- a coregistered atlas in native subject space (e.g. Brainnetome, AAL, ...). Make sure you have used nearest neighbor interpolation here, as only integer values are accepted.
-- a description of the atlas, where the label is associated with the name of the brain region, the name of the large scale region and the hemisphere. For instance label=1, name_region='SFG_7_1', name_largescale_region='FRO', hemisphere='L'. This type of information usually is supplied with every atlas.
+- a 3D brain map of each subject containing some kind of data you want to display (preferentially in native subject space)
+- an atlas (e.g. Brainnetome, AAL, ...). The atlas should be in the same space as the 3D brain map of each subject. Make sure you have used nearest neighbor interpolation here, as only integer values are accepted.
+- a description of the atlas. This description needs to be entered manually (see below). The description connects the integer values found in the atlas to information that is necessary for display. We call the atlas value "label", and need to associate it with the name of the region (name_region), the largescale name of the region (name_largescale_region) for sake of grouping (e.g. FRO, TEM, ...) and lastly the hemisphere (can only be L and R). This type of information usually is supplied with every atlas.
 
 
 RUNNING BRAINGLANCE
