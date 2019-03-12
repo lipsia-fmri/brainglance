@@ -42,7 +42,14 @@ The first step is to instantiate the brainglance object:
         bg = BrainGlance()
 
 
-Next, you will need to read in the atlas description. Here we assume you have already brought it into a list of lists, where sublist_element[0] = index, sublist_element[1] = name of the area, sublist_element[2] = name of the large scale grouping area, sublist_element[3] = hemisphere (l or r).
+
+You will need to fill this information in, e.g. manually:
+
+        bg.add_atlas_definition_area(label=1, name_area="area1", name_largescale_region="FRO", hemisphere="L")
+        bg.add_atlas_definition_area(label=2, name_area="area2", name_largescale_region="FRO", hemisphere="L")
+        bg.add_atlas_definition_area(label=3, name_area="area1", name_largescale_region="FRO", hemisphere="R")
+        bg.add_atlas_definition_area(label=4, name_area="area2", name_largescale_region="FRO", hemisphere="R")
+
 
 In case of the Brainnetome atlas, the following code achieves this:
 
@@ -59,11 +66,11 @@ Next, we will read in this list into the brainglance object.
 
 
         for i in range(M):
-            idx = np.int(atlas_descr[i][0])
+            label = np.int(atlas_descr[i][0])
             name_area = atlas_descr[i][1]
             name_largescale_region = atlas_descr[i][5].upper()
             hemisphere = atlas_descr[i][2].upper()
-            bg.add_atlas_definition_area(idx, name_area, name_largescale_region, hemisphere)
+            bg.add_atlas_definition_area(label, name_area, name_largescale_region, hemisphere)
 
 
 Now you need to add your subjects. For each subject, you need to provide the 3D brain map with values you want to show (fp_brainmap) and a coregistered atlas in native subject space (fp_atlas). Furthermore, you can supply the name of the subject as third argument, however, this is optional.
@@ -72,6 +79,11 @@ Add a single subject via
 
 
           bg.add_subject(fp_brainmap, fp_atlas, "subject-01")
+
+You can add more subjects with the same call:
+
+          bg.add_subject(fp_brainmap2, fp_atlas2, "subject-02")
+          bg.add_subject(fp_brainmap3, fp_atlas3, "subject-03")
 
 
 Now you can generate a brainglance plot, supplying the figure output file fp_figure.
