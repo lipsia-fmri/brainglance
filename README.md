@@ -96,6 +96,15 @@ Now you can generate a brainglance plot, supplying the figure output file fp_fig
 
 EXTRA OPTIONS
 =========================
+Draw something else than the mean
+-----------------------------------------------
+By default, brainglance shows the mean within the brain area. If you want to plot something else, you will need to load your subjects and provide here the desired summary method:
+
+
+          bg.add_subject(fp_brainmap, fp_atlas, "subject-01", method=var)
+          
+Allowed values for method are: "var", "std", "max", "min", "median".
+
 
 Change order or selection of brain regions
 -----------------------------------------------
