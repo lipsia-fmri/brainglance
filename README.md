@@ -30,7 +30,7 @@ You will need the following inputs:
 
 - a 3D brain map of each subject in native subject space, containing some kind of data you want to display
 - a coregistered atlas in native subject space (e.g. Brainnetome, AAL, ...). Make sure you have used nearest neighbor interpolation here, as only integer values are accepted.
-- a description of the atlas, where the label index is associated with the name of the brain region, the name of the large scale region and the hemisphere. For instance label=1, name_region='SFG_7_1', name_largescale_region='FRO', hemisphere='L'. This type of information usually is supplied with every atlas.
+- a description of the atlas, where the label is associated with the name of the brain region, the name of the large scale region and the hemisphere. For instance label=1, name_region='SFG_7_1', name_largescale_region='FRO', hemisphere='L'. This type of information usually is supplied with every atlas.
 
 
 RUNNING BRAINGLANCE
@@ -43,7 +43,8 @@ The first step is to instantiate the brainglance object:
 
 
 
-You will need to fill this information in, e.g. manually:
+
+You will need to fill the description of the atlas. The "label" is corresponding to the integer value in the atlas. You can add all information manually, e.g. manually:
 
         bg.add_atlas_definition_area(label=1, name_area="area1", name_largescale_region="FRO", hemisphere="L")
         bg.add_atlas_definition_area(label=2, name_area="area2", name_largescale_region="FRO", hemisphere="L")
