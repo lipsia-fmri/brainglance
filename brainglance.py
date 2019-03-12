@@ -117,6 +117,10 @@ class Brainglance:
                     data_summary = np.max(data_brainmap_cut)
                 elif method == "std":
                     data_summary = np.std(data_brainmap_cut)
+                elif method == "var":
+                    data_summary = np.var(data_brainmap_cut)
+                elif method == "median":
+                    data_summary = np.median(data_brainmap_cut)
                     
             Svec[0, m] = data_summary
         
@@ -154,7 +158,7 @@ class Brainglance:
         for r in self.all_largescale_regions:
             for lrstr in ["L","R"]:
                 tmp_idx = []
-                for i in range(M):
+                for i in range(self.S.shape[1]):
                     if self.dict_brain_areas[self.map_idx2internalindex[i]][1] == r and self.dict_brain_areas[self.map_idx2internalindex[i]][2] == lrstr:
                         tmp_idx.append(i)
                 idx_regionarea.append(tmp_idx)
