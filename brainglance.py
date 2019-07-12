@@ -18,7 +18,7 @@ import matplotlib.textpath as tp
 
         
 
-class Brainglance:
+class BrainGlance:
     
     def __init__(self):
         self.dict_brain_areas = {}
@@ -26,6 +26,7 @@ class Brainglance:
         self.all_largescale_regions = []
         self.map_idx2internalindex = None
         self.S = None
+        self.M = None
         self.list_subjects = []
         
         # drawing definitions
@@ -49,17 +50,19 @@ class Brainglance:
         self.cluster_assignments = None
         self.cluster_assignment_scaling = False #scales the cluster subjects according to how many subjects are assigned to any cluster
         
-        self.init_two_colormaps()
-        self.do_demean = False
+        # self.init_two_colormaps()
+        self.init_single_colormap()
+        self.do_normalize = False
         
         self.dpi = 300
         
     
-    def init_two_colormaps(self):
-        self.set_colormaps_posneg(cm.get_cmap("Oranges"), cm.get_cmap("Blues"))
+    def init_double_colormaps(self, cmap_name_positive="Oranges", cmap_name_negative="Blues"):
+        self.set_colormaps_posneg(cm.get_cmap(cmap_name_positive), cm.get_cmap(cmap_name_negative))
+        
     
-    def init_one_colormap(self):
-        self.set_colormaps_posneg(cm.get_cmap("Oranges"))
+    def init_single_colormap(self, cmap_name="magma"):
+        self.set_colormaps_posneg(cm.get_cmap(cmap_name), cm.get_cmap(cmap_name))
 
     
     def add_atlas_definition_area(self, idx, name_area, name_largescale_region, hemisphere):
@@ -93,12 +96,14 @@ class Brainglance:
     def add_subject(self, fp_brainmap, fp_atlas, name_subject=None, method="average"):
         assert os.path.isfile(fp_brainmap), "fp_brainmap does not exist: {}".format(fp_brainmap)
         assert os.path.isfile(fp_atlas), "fp_atlas does not exist: {}".format(fp_atlas)
+        assert self.M is not None, "you need to run add_atlas_definition_area first."
         
         data_brainmap = nib.load(fp_brainmap).get_data()
         data_atlas = nib.load(fp_atlas).get_data()
         
         #atlas checks!
-        assert np.issubdtype(data_atlas.dtype, np.integer), "atlas is not in integer format. Did you use the correct interpolation method? Maybe something wrong with your atlas! Make sure it is in integer representation!"
+        assert np.unique(data_atlas).size - 1 <= self.M #label can be 0
+        # assert np.issubdtype(data_atlas.dtype, np.integer), "atlas is not in integer format. Did you use the correct interpolation method? Maybe something wrong with your atlas! Make sure it is in integer representation!"
         assert data_brainmap.shape == data_atlas.shape, "brainmap and atlas size mismatch! brainmap: {}, atlas: {}".format(data_brainmap.shape, data_atlas.shape)
         
         Svec = np.zeros((1, self.M))
@@ -152,7 +157,7 @@ class Brainglance:
                 return self.cmap_neg(-value)      
        
     
-    def get_colorbar(self, fp_figure):   
+    def save_colorbar(self, fp_figure):   
         #may only be for a subset of the data...
         idx_regionarea = []
         for r in self.all_largescale_regions:
@@ -233,6 +238,7 @@ class Brainglance:
             self.cluster_assignments.append(np.where(labels==i)[0])
             
         self.cluster_assignment_scaling = True
+        self.list_subjects_orig = np.asarray(self.list_subjects)
         self.list_subjects = ["cluster {}".format(l+1) for l in range(nmb_clusters)]
             
             
@@ -341,10 +347,15 @@ class Brainglance:
         S_sub = self.S[:,all_idx_regionarea]
         
         
-        if self.do_demean:
-            Snorm = self.S - np.mean(self.S)
-            maxabs = np.max(np.abs(Snorm))
-            Snorm = Snorm/maxabs
+        if self.do_normalize:
+            # Snorm = self.S - np.mean(self.S)
+            # maxabs = np.max(np.abs(Snorm))
+            # Snorm = Snorm/maxabs
+            Snorm = self.S - np.min(self.S)
+            Snorm = Snorm/np.max(Snorm)
+            Snorm = Snorm*2 - 1
+            
+            
         else:
             maxabs = np.max(np.abs(S_sub))
             Snorm = self.S/maxabs
