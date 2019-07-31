@@ -92,6 +92,12 @@ class BrainGlance:
             all_largescale_regions_new.append(l)
         self.all_largescale_regions =  all_largescale_regions_new
         
+    def print_Sindex_name(self, idx):
+        list_names = self.dict_brain_areas[self.map_idx2internalindex[idx]]
+        print("area: {} {} at internal indx".format(list_names[2], list_names[0]))
+        
+        
+        
         
     def add_subject(self, fp_brainmap, fp_atlas, name_subject=None, method="average"):
         assert os.path.isfile(fp_brainmap), "fp_brainmap does not exist: {}".format(fp_brainmap)
@@ -102,7 +108,7 @@ class BrainGlance:
         data_atlas = nib.load(fp_atlas).get_data()
         
         #atlas checks!
-        assert np.unique(data_atlas).size - 1 <= self.M #label can be 0
+        # assert np.unique(data_atlas).size - 1 <= self.M #label can be 0
         # assert np.issubdtype(data_atlas.dtype, np.integer), "atlas is not in integer format. Did you use the correct interpolation method? Maybe something wrong with your atlas! Make sure it is in integer representation!"
         assert data_brainmap.shape == data_atlas.shape, "brainmap and atlas size mismatch! brainmap: {}, atlas: {}".format(data_brainmap.shape, data_atlas.shape)
         
@@ -138,6 +144,7 @@ class BrainGlance:
             name_subject = "sub_{}".format(len(self.list_subjects))
             
         self.list_subjects.append(name_subject)
+        print("added subject {}".format(name_subject))
         
     def set_colormap(self, cmap):
         self.cmap = cmap
